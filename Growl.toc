@@ -1,0 +1,6 @@
+## Interface: 40300
+## Title: Glowl
+## Author: susnow
+## Notes: Glowl for wow
+
+core.lua
