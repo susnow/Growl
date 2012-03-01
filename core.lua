@@ -2,7 +2,10 @@
 
 local tex = "Interface\\AddOns\\Growl\\media\\sd"
 local tex2 = "Interface\\Buttons\\WHITE8X8"
-
+local close = "Interface\\AddOns\\Growl\\media\\close"
+local close2 = "Interface\\AddOns\\Growl\\media\\close2"
+local close3 = "Interface\\AddOns\\Growl\\media\\cls1"
+local close4 = "Interface\\AddOns\\Growl\\media\\cls2"
 --MainPanel
 local f = CreateFrame("Button","GrowlPanel",UIParent)
 f.nextUpdate = 0
@@ -12,6 +15,17 @@ f.tex = f:CreateTexture(nil,"BACKGROUND")
 f.tex:SetAllPoints(f)
 f.tex:SetTexture(tex2)
 f.tex:SetVertexColor(.1,.1,.1,.7)
+
+--closeicon
+f.close = CreateFrame("Button",nil,f)
+f.close:SetSize(13,13)
+f.close:SetPoint("TOPRIGHT",f,-5,-5)
+f.close.tex = f.close:CreateTexture(nil,"OVERLAY")
+f.close.tex:SetTexture(close)
+f.close.tex:SetPoint("TOPLEFT",f.close)
+f.close.tex:SetPoint("BOTTOMRIGHT",f.close)
+f.close.tex:SetVertexColor(.3,.3,.3,.5)
+
 
 --icon
 f.icon = CreateFrame("Frame",nil,f)
@@ -99,10 +113,12 @@ local PanelOnLeave = function(obj)
 end
 
 f:SetScript("OnEnter",function()
+	print("OnEnter")
 	PanelOnEnter(f)
 end)
 
 f:SetScript("OnLeave",function()
+	print("OnLeave")
 	PanelOnLeave(f)
 end)
 
