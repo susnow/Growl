@@ -1,6 +1,8 @@
 ## Interface: 40300
-## Title: Glowl
+## Title: Growl
 ## Author: susnow
-## Notes: Glowl for wow
+## Notes: Growl for wow
 
+config.lua
+data.lua
 core.lua
