@@ -1,8 +1,10 @@
-﻿local addon,growl = ...
-local cfg = {}
+﻿local addon,ns = ...
+local CFG = {}
+CFG.POINT = "TOPLEFT"
+CFG.OBJECTS_NUM = 5
 
-cfg.STATUS_CHANGE = true 
-cfg.WHISPER = true
-cfg.BN_WHISPER = true　
+CFG.STATUS_CHANGE = false -- this key has bug 
+CFG.WHISPER = true
+CFG.BN_WHISPER = true
 
-growl.cfg = cfg 
+ns.CFG = CFG 

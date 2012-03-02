@@ -1,7 +1,7 @@
-﻿local addon,growl = ...
-local data = {}
+﻿local addon,ns = ...
+local DATA = {}
 
-data.STATUS_CHANGE = {
+DATA.STATUS_CHANGE = {
 	EVENT = "PLAYER_FLAGS_CHANGED",
 	title = function(...) 
 		return "Status changed" 
@@ -25,7 +25,7 @@ data.STATUS_CHANGE = {
 	duration = 2,
 }
 
-data.WHISPER = {
+DATA.WHISPER = {
 	EVENT = "CHAT_MSG_WHISPER",
 	title = function(...)  
 		local sender = select(2,...)
@@ -38,11 +38,11 @@ data.WHISPER = {
 		end
 		local title = ""
 		if isMyFriend then
-			title = "Whiper from friend"
+			title = "Whisper from friend"
 		elseif not isMyFriend and sender ~= UnitName("player") then
 			title = "Whisper from stranger"
 		elseif not isMyFriend and sender == UnitName("player") then
-			title = "Whiper from me"
+			title = "Whisper from me"
 		end
 		return title
 	end,
@@ -50,8 +50,8 @@ data.WHISPER = {
 		local msg,sender = ...
 		sender = UnitName(sender) == UnitName("player") and "me" or sender
 		local content = string.format("%s:%s",sender,msg)
-		if string.len(content) > 26 then
-			content = string.sub(content,1,24)
+		if string.len(content) > 80 then
+			content = string.sub(content,1,78)
 			content = content .. "..."
 		end
 		return content
@@ -59,7 +59,7 @@ data.WHISPER = {
 	duration = 3.5,
 }
 
-data.BN_WHISPER = {
+DATA.BN_WHISPER = {
 	EVENT = "CHAT_MSG_BN_WHISPER",
 	title = function(...)  
 		local sender = select(2,...)
@@ -68,7 +68,7 @@ data.BN_WHISPER = {
 	end,
 	content = function(...)
 		local msg,sender = ...
-		local content = string.format("%s:%s",sender,msg)
+		local content = string.format("%s%:%s",sender,msg)
 		if string.len(content) > 26 then
 			content = string.sub(content,1,24)
 			content = content .. "..."
@@ -78,4 +78,4 @@ data.BN_WHISPER = {
 	duration = 3.5,
 }
 
-growl.data = data
+ns.DATA = DATA 
