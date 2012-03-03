@@ -5,5 +5,5 @@
 
 config.lua
 data.lua
-widget.lua
+handler.lua
 core.lua

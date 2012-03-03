@@ -5,7 +5,7 @@ local CFG = ns.CFG
 local DATA = ns.DATA
 local tex = "Interface\\Buttons\\WHITE8X8"
 
-function Growl:New(point,obj,index)
+function Growl:New(obj,index)
 	if not index then 
 		index = #Growls+1
 	end
@@ -44,6 +44,7 @@ function Growl:New(point,obj,index)
 		end,
 	}
 	do
+		local point = CFG.POINT or "TOPLEFT"
 		SETPOINT[point](obj)
 	end
 	obj.tex = obj:CreateTexture(nil, "BACKGROUND")
@@ -107,7 +108,7 @@ function Growl:New(point,obj,index)
 	table.insert(Growls,obj)
 end
 
-function Growl:OnShow(obj,time,isOnEnter)
+function Growl:StartShow(obj,time,isOnEnter)
 	obj:Show()
 	local oldTime = time or GetTime()
 	if isOnEnter then
@@ -132,7 +133,7 @@ function Growl:OnShow(obj,time,isOnEnter)
 	end)
 end
 
-function Growl:OnHide(obj,time)
+function Growl:StartHide(obj,time)
 	local oldTime = time or GetTime()
 	obj:SetScript("OnUpdate",function(self,elapsed)
 		self.nextUpdate = self.nextUpdate + elapsed
@@ -151,34 +152,51 @@ function Growl:OnHide(obj,time)
 	end)
 end
 
-function Growl:OnEnter(obj)
-	if obj:IsShown() then
-		Growl:OnShow(obj,GetTime(),true)
-	end
-end
-
-function Growl:OnLeave(obj)
-	if obj:IsShown() then
-		Growl:OnHide(obj,GetTime()+1)
+function Growl:SetAttributes(obj,flag)
+	local setAttributes = {
+		Enter = function(obj)  
+			obj:SetScript("OnEnter",function()
+				if obj:IsShown() then
+					Growl:StartShow(obj,GetTime(),true)
+				end
+			end)
+		end,
+		Leave = function(obj)
+			obj:SetScript("OnLeave",function()
+				if obj:IsShown() then
+					Growl:StartHide(obj,GetTime()+1)
+				end
+			end)
+		end,
+		Close = function(obj)
+			obj.close:SetScript("OnClick",function()
+				if obj:IsShown() then
+					obj:SetAlpha(0)
+					obj:Hide()
+				end
+			end)
+		end,
+	} 
+	do
+		setAttributes[flag](obj)
 	end
 end
 
 function Growl.Animation(objects,index,value,...)
-	Growl:OnShow(objects[index],GetTime())
+	Growl:StartShow(objects[index],GetTime())
 	objects[index].title.text:SetText(value.title(...))
 	objects[index].content.text:SetText(value.content(...))
-	Growl:OnHide(objects[index],GetTime() + value.duration)
+	Growl:StartHide(objects[index],GetTime() + value.duration)
 end
 
-function Growl:Sort(objs,data)
-	--init event
-	for k, v in pairs(data) do
+function Growl:Load(objs)
+	for k, v in pairs(DATA) do
 		if v and v.EVENT then
 			Growl:RegisterEvent(v.EVENT)
 		end
 	end
 	Growl:SetScript("OnEvent", function(self, event, ...)
-		for k,v in pairs(data) do
+		for k,v in pairs(DATA) do
 			if event == v.EVENT and CFG[k] then
 				for c = 1, #objs do
 					local obj = objs[c]

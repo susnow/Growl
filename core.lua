@@ -7,9 +7,10 @@ local Objects = {}
 
 for i = 1, CFG.OBJECTS_NUM do
 	Objects[i] = CreateFrame("Frame","Growl"..i,UIParent)
-	Growl:New(CFG.POINT,Objects[i])
-	Objects[i]:SetScript("OnEnter",function() Growl:OnEnter(Objects[i]) end)
-	Objects[i]:SetScript("OnLeave",function() Growl:OnLeave(Objects[i]) end)
+	Growl:New(Objects[i])
+	Growl:SetAttributes(Objects[i],"Enter")
+	Growl:SetAttributes(Objects[i],"Leave")
+	Growl:SetAttributes(Objects[i],"Close")
 end
 
-Growl:Sort(Objects,DATA)
+Growl:Load(Objects,DATA)
