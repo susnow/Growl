@@ -2,34 +2,6 @@
 local DATA = {}
 
 --custom function here
-local utf8sub = function(string, i, dots)
-	local bytes = string:len()
-	if (bytes <= i) then
-		return string
-	else
-		local len, pos = 0, 1
-		while(pos <= bytes) do
-			len = len + 1
-			local c = string:byte(pos)
-			if c > 240 then
-				pos = pos + 4
-			elseif c > 225 then
-				pos = pos + 3
-			elseif c > 192 then
-				pos = pos + 2
-			else
-				pos = pos + 1
-			end
-			if (len == i) then break end
-		end
-
-		if (len == i and pos <= bytes) then
-			return string:sub(1, pos - 1)..(dots and "..." or "")
-		else
-			return string
-		end
-	end
-end
 --
 
 
