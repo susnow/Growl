@@ -5,6 +5,7 @@ local CFG = ns.CFG
 local DATA = ns.DATA
 local tex = "Interface\\Buttons\\WHITE8X8"
 
+
 function Growl:New(obj,index)
 	if not index then 
 		index = #Growls+1
@@ -78,8 +79,9 @@ function Growl:New(obj,index)
 
 	--title
 	obj.title = CreateFrame("Frame", "Growl"..index.."Title", obj)
-	obj.title:SetSize(obj:GetWidth() - obj.icon:GetWidth(), obj:GetHeight()/5)
-	obj.title:SetPoint("TOPLEFT", obj.icon, "TOPRIGHT", 10, -10)
+	obj.title:SetSize(obj:GetWidth() - obj.icon:GetWidth()-30, obj:GetHeight()/5)
+	obj.title:SetPoint("TOPLEFT", obj.icon, "TOPRIGHT", 10, 0)
+	obj.title.tex = obj.title:CreateTexture(nil,"OVERLAY")
 	obj.title.text = obj.title:CreateFontString(nil, "OVERLAY")
 	obj.title.text:SetFontObject(ChatFontNormal)
 	do 
@@ -91,15 +93,17 @@ function Growl:New(obj,index)
 
 	--content
 	obj.content = CreateFrame("Frame","Growl"..index.."Content",obj)
-	obj.content:SetSize(obj:GetWidth() - obj.icon:GetWidth(), obj:GetHeight() - obj.title:GetHeight()-5)
+	obj.content:SetSize(obj:GetWidth() - obj.icon:GetWidth()-30, obj:GetHeight() - obj.title:GetHeight()-20)
+
+	obj.content.tex = obj.title:CreateTexture(nil,"OVERLAY")
 	obj.content:SetPoint("TOPLEFT", obj.title, "BOTTOMLEFT", 0, -4)
 	obj.content.text = obj.content:CreateFontString(nil,"OVERLAY")
 	obj.content.text:SetFontObject(ChatFontNormal)
 	obj.content.text:SetPoint("TOPLEFT",obj.content)
-	obj.content.text:SetWidth(obj.content:GetWidth()-26)
+	obj.content.text:SetWidth(obj.content:GetWidth())
 	obj.content.text:SetJustifyH("LEFT")
 	obj.content.text:SetJustifyV("TOP")
-	obj.content.text:SetHeight(obj.content:GetHeight()-5)
+	obj.content.text:SetHeight(obj.content:GetHeight())
 	obj.content.text:SetText("test content")
 
 	obj:SetAlpha(0)
@@ -169,6 +173,15 @@ function Growl:SetAttributes(obj,flag)
 			end)
 		end,
 		Close = function(obj)
+			obj.close:SetScript("OnEnter",function()
+				obj.close.text:SetTextColor(1,1,1,1)
+				if obj:IsShown() then
+					Growl:StartShow(obj,GetTime(),true)
+				end
+			end)
+			obj.close:SetScript("OnLeave",function()
+				obj.close.text:SetTextColor(.5,.5,.5,1)
+			end)
 			obj.close:SetScript("OnClick",function()
 				if obj:IsShown() then
 					obj:SetAlpha(0)
@@ -184,8 +197,8 @@ end
 
 function Growl.Animation(objects,index,value,...)
 	Growl:StartShow(objects[index],GetTime())
-	objects[index].title.text:SetText(value.title(...))
-	objects[index].content.text:SetText(value.content(...))
+	objects[index].title.text:SetText(value.title(...) or "")
+	objects[index].content.text:SetText(value.content(...) or "")
 	Growl:StartHide(objects[index],GetTime() + value.duration)
 end
 
