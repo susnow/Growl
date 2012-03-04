@@ -4,6 +4,7 @@ local Growls = {}
 local CFG = ns.CFG
 local DATA = ns.DATA
 local tex = "Interface\\Buttons\\WHITE8X8"
+local bg = "Interface\\AddOns\\Growl\\media\\smoke.tga"
 
 
 function Growl:New(obj,index)
@@ -49,8 +50,11 @@ function Growl:New(obj,index)
 		SETPOINT[point](obj)
 	end
 	obj.tex = obj:CreateTexture(nil, "BACKGROUND")
-	obj.tex:SetAllPoints(obj)
-	obj.tex:SetTexture(tex)
+	obj.tex:SetSize(obj:GetWidth(),obj:GetHeight())
+	obj.tex:SetPoint("TOPLEFT",obj)
+	obj.tex:SetPoint("BOTTOMRIGHT",obj)
+	obj.tex:SetTexCoord(.785,.215,.785,.215)
+	obj.tex:SetTexture(tex2)
 	obj.tex:SetVertexColor(.1, .1, .1, .7)
 
 	--close button
