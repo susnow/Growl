@@ -5,6 +5,7 @@ local CFG = ns.CFG
 local DATA = ns.DATA
 local tex = "Interface\\Buttons\\WHITE8X8"
 local bg = "Interface\\AddOns\\Growl\\media\\smoke.tga"
+local font =  "Interface\\AddOns\\Growl\\media\\string.ttf"
 
 
 function Growl:New(obj,index)
@@ -53,8 +54,8 @@ function Growl:New(obj,index)
 	obj.tex:SetSize(obj:GetWidth(),obj:GetHeight())
 	obj.tex:SetPoint("TOPLEFT",obj)
 	obj.tex:SetPoint("BOTTOMRIGHT",obj)
-	obj.tex:SetTexCoord(.785,.215,.785,.215)
-	obj.tex:SetTexture(tex2)
+	obj.tex:SetTexCoord(.787,.213,.785,.215)
+	obj.tex:SetTexture(bg)
 	obj.tex:SetVertexColor(.1, .1, .1, .7)
 
 	--close button
@@ -63,11 +64,7 @@ function Growl:New(obj,index)
 	obj.close:SetSize(20, 20)
 	obj.close:SetPoint("TOPRIGHT", obj, -5, -5)
 	obj.close.text = obj.close:CreateFontString(nil,"OVERLAY")
-	obj.close.text:SetFontObject(ChatFontNormal)
-	do
-		local font,size,flag = obj.close.text:GetFont()
-		obj.close.text:SetFont(font, 18, flag)
-	end
+	obj.close.text:SetFont(font, 18, "CHROMEOUTLINE")
 	obj.close.text:SetPoint("CENTER", obj.close)
 	obj.close.text:SetText("x")
 	obj.close.text:SetTextColor(.5, .5, .5, 1)
@@ -87,11 +84,7 @@ function Growl:New(obj,index)
 	obj.title:SetPoint("TOPLEFT", obj.icon, "TOPRIGHT", 10, 0)
 	obj.title.tex = obj.title:CreateTexture(nil,"OVERLAY")
 	obj.title.text = obj.title:CreateFontString(nil, "OVERLAY")
-	obj.title.text:SetFontObject(ChatFontNormal)
-	do 
-		local font,size,flag = obj.title.text:GetFont()
-		obj.title.text:SetFont(font, 18, "OUTLINE")
-	end
+	obj.title.text:SetFont(font, 14, "CHROMEOUTLINE")
 	obj.title.text:SetText("test")
 	obj.title.text:SetPoint("LEFT",obj.title)
 
@@ -102,7 +95,7 @@ function Growl:New(obj,index)
 	obj.content.tex = obj.title:CreateTexture(nil,"OVERLAY")
 	obj.content:SetPoint("TOPLEFT", obj.title, "BOTTOMLEFT", 0, -4)
 	obj.content.text = obj.content:CreateFontString(nil,"OVERLAY")
-	obj.content.text:SetFontObject(ChatFontNormal)
+	obj.content.text:SetFont(font,12,"NORMAL")
 	obj.content.text:SetPoint("TOPLEFT",obj.content)
 	obj.content.text:SetWidth(obj.content:GetWidth())
 	obj.content.text:SetJustifyH("LEFT")
