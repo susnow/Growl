@@ -79,7 +79,7 @@ DATA.BN_WHISPER = {
 	end,
 	content = function(...)
 		local msg,sender = ...
-		local content = string.format("%s%:%s",sender,msg)
+		local content = string.format("%s:%s",sender,msg)
 		return content
 	end,
 	duration = 3.5,
