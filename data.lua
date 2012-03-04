@@ -1,9 +1,20 @@
-﻿local addon,ns = ...
+﻿--[[
+how to use
+DATA.xxx = {
+	EVENT = "XXXXXXXX", --Growl object will show when the EVENT fire
+	title = function(...)  	
+		return title_text  --in the function you should set your title_text as a string object 
+	end,
+	content = function(...)
+		return content_text -- in the function you should set your content_text as a string object
+	end,
+	duration = 1, -- how long does the Growl object display , it must be a int object or float object
+}
+
+when you create the DATA object , create the same name data object in config.lua and set it true or false if you wanna enable it or not 
+]]
+local addon,ns = ...
 local DATA = {}
-
---custom function here
---
-
 
 DATA.STATUS_CHANGE = {
 	EVENT = "PLAYER_FLAGS_CHANGED",
