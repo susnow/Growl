@@ -65,10 +65,6 @@ DATA.WHISPER = {
 		local msg,sender = ...
 		sender = UnitName(sender) == UnitName("player") and "me" or sender
 		local content = string.format("%s:%s",sender,msg)
-	--	if string.len(content) > 80 then
-	--		content = string.sub(content,1,78)
-	--		content = content .. "..."
-	--	end
 		return content
 	end,
 	duration = 3.5,
@@ -84,10 +80,6 @@ DATA.BN_WHISPER = {
 	content = function(...)
 		local msg,sender = ...
 		local content = string.format("%s%:%s",sender,msg)
-		if string.len(content) > 26 then
-			content = string.sub(content,1,24)
-			content = content .. "..."
-		end
 		return content
 	end,
 	duration = 3.5,
