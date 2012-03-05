@@ -222,7 +222,7 @@ function Growl:Load(objs)
 					local obj = objs[c]
 					if not obj:IsShown() then
 						Growl.Animation(objs, c ,v,...)
-						break;
+						break
 					end
 				end
 			end

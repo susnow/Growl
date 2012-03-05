@@ -103,7 +103,30 @@ DATA.NEW_MAIL = {
 		local content = "Go the nearest mail box to recieve it"
 		return content
 	end,
-	delay = 5,
+	delay = 3.5,
+}
+
+DATA.LOOT_INFO = {
+	EVENT = "CHAT_MSG_LOOT",
+	source = "SYSTEM",
+	title = function(...)
+		local title = "LOOT"
+		return title
+	end,
+	content = function(...)
+		local msg = ...
+		local cs = "获得了物品"
+		local index1,index2 = string.find(msg,cs)
+		local looter = string.sub(msg,1,index1-1)
+		local lootItem = string.sub(msg,index2+4)
+		--print(looter)
+		--print(lootItem)
+		--local getter = string.sub(msg,1,3)
+		local content = ""
+		content = msg 
+		return content
+	end,
+	delay = 3.5,
 }
 
 ns.DATA = DATA 
