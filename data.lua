@@ -1,23 +1,28 @@
 ﻿--[[
-how to use
+USEAGE:
+you can create DATA object as a table like the sample:
 DATA.xxx = {
 	EVENT = "XXXXXXXX", --Growl object will show when the EVENT fire
+	source = "XXXXXXX", --the source will effect the object's click function, "PLAYER" will do whisper and others won't do anything  
 	title = function(...)  	
 		return title_text  --in the function you should set your title_text as a string object 
 	end,
 	content = function(...)
 		return content_text -- in the function you should set your content_text as a string object
 	end,
-	duration = 1, -- how long does the Growl object display , it must be a int object or float object
+	delay = 1, -- how long does the Growl object display , it must be a int object or float object
 }
 
 when you create the DATA object , create the same name data object in config.lua and set it true or false if you wanna enable it or not 
+
+GG HF
 ]]
 local addon,ns = ...
 local DATA = {}
 
 DATA.STATUS_CHANGE = {
 	EVENT = "PLAYER_FLAGS_CHANGED",
+	source = "SYSTEM",
 	title = function(...) 
 		return "Status changed" 
 	end,
@@ -37,11 +42,12 @@ DATA.STATUS_CHANGE = {
 		end
 		return content 
 	end,
-	duration = 2,
+	delay = 2,
 }
 
 DATA.WHISPER = {
 	EVENT = "CHAT_MSG_WHISPER",
+	source = "PLAYER",
 	title = function(...)  
 		local sender = select(2,...)
 		local isMyFriend = false
@@ -67,11 +73,12 @@ DATA.WHISPER = {
 		local content = string.format("%s:%s",sender,msg)
 		return content
 	end,
-	duration = 3.5,
+	delay = 3.5,
 }
 
 DATA.BN_WHISPER = {
 	EVENT = "CHAT_MSG_BN_WHISPER",
+	source = "PLAYER",
 	title = function(...)  
 		local sender = select(2,...)
 		local title = "Whisper from BN RealID" 
@@ -82,7 +89,21 @@ DATA.BN_WHISPER = {
 		local content = string.format("%s:%s",sender,msg)
 		return content
 	end,
-	duration = 3.5,
+	delay = 3.5,
+}
+
+DATA.NEW_MAIL = {
+	EVENT = "UPDATE_PENDING_MAIL",
+	source = "SYSTEM",
+	title = function(...)
+		local title = "You get a new mail"
+		return title
+	end,
+	content = function(...)
+		local content = "Go the nearest mail box to recieve it"
+		return content
+	end,
+	delay = 5,
 }
 
 ns.DATA = DATA 

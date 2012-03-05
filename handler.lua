@@ -106,6 +106,8 @@ function Growl:New(obj,index)
 	obj:SetAlpha(0)
 	obj:Hide()
 	obj.nextUpdate = 0
+	obj.source = nil 
+	obj.fullMsg = ""
 	table.insert(Growls,obj)
 end
 
@@ -186,6 +188,13 @@ function Growl:SetAttributes(obj,flag)
 				end
 			end)
 		end,
+		Clicks = function(obj)
+			obj:SetScript("OnClick",function()
+				if obj.source and obj.source == "PLAYER" then
+					ChatFrame_ReplyTell(ChatFrame1)
+				end
+			end)
+		end,
 	} 
 	do
 		setAttributes[flag](obj)
@@ -196,7 +205,8 @@ function Growl.Animation(objects,index,value,...)
 	Growl:StartShow(objects[index],GetTime())
 	objects[index].title.text:SetText(value.title(...) or "")
 	objects[index].content.text:SetText(value.content(...) or "")
-	Growl:StartHide(objects[index],GetTime() + value.duration)
+	objects[index].source = value.source
+	Growl:StartHide(objects[index],GetTime() + value.delay)
 end
 
 function Growl:Load(objs)
