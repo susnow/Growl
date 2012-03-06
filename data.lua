@@ -2,13 +2,16 @@
 USEAGE:
 you can create DATA object as a table like the sample:
 DATA.xxx = {
-	EVENT = "XXXXXXXX", --Growl object will show when the EVENT fire
-	source = "XXXXXXX", --the source will effect the object's click function, "PLAYER" will do whisper and others won't do anything  
+	EVENT = "XXXXXXXX", --Growl object will register this event 
+	source = "XXXXXXX", --the source will effect the object's click function, "PLAYER" will send whisper message to the whisper  , "ITEM" will open the Gametooltip of the item ,and others won't do anything   
 	title = function(...)  	
 		return title_text  --in the function you should set your title_text as a string object 
 	end,
 	content = function(...)
-		return content_text -- in the function you should set your content_text as a string object
+		return content_text 
+		-- in the function you should set your content_text as a string object 
+		--FIXME 2012/03/06 if you need to control the timming of animation show when the event fired, you should create judge in your function  and when the function return true it will be done,you can see the example codes in LOOT_INFO
+		-- elseif you needn't control animation,let it show when the event is firing, you just need return the string object in your function and it equivalent to return true 
 	end,
 	delay = 1, -- how long does the Growl object display , it must be a int object or float object
 }
@@ -108,23 +111,31 @@ DATA.NEW_MAIL = {
 
 DATA.LOOT_INFO = {
 	EVENT = "CHAT_MSG_LOOT",
-	source = "SYSTEM",
+	source = "ITEM",
 	title = function(...)
-		local title = "LOOT"
+		local title = "You loot item"
 		return title
 	end,
 	content = function(...)
 		local msg = ...
+		local op1,op2 = "%[","%]"
 		local cs = "获得了物品"
-		local index1,index2 = string.find(msg,cs)
-		local looter = string.sub(msg,1,index1-1)
-		local lootItem = string.sub(msg,index2+4)
-		--print(looter)
-		--print(lootItem)
-		--local getter = string.sub(msg,1,3)
-		local content = ""
-		content = msg 
-		return content
+		if not string.find(msg,cs) then 
+			return false 
+		else
+			local index1,index2 = string.find(msg,cs)
+			local looter = string.sub(msg,1,index1-1)
+			local op1s,op1e = string.find(msg,op1)
+			local op2s,op2e = string.find(msg,op2)
+			local lootItem = string.sub(msg,op1e+1,op2e-1)
+			local content = ""
+			content = lootItem 
+			if looter == "你" then
+				return content
+			else 
+				return false
+			end
+		end
 	end,
 	delay = 3.5,
 }

@@ -189,9 +189,15 @@ function Growl:SetAttributes(obj,flag)
 			end)
 		end,
 		Clicks = function(obj)
-			obj:SetScript("OnClick",function()
+			obj:SetScript("OnClick",function(self,event,...)
 				if obj.source and obj.source == "PLAYER" then
 					ChatFrame_ReplyTell(ChatFrame1)
+				elseif obj.source and obj.source == "ITEM" then
+					ToggleAllBags()	
+					if BagItemSearchBox ~= nil then
+						BagItemSearchBox:SetFocus()
+						BagItemSearchBox:SetText(obj.content.text:GetText())
+					end
 				end
 			end)
 		end,
@@ -218,11 +224,13 @@ function Growl:Load(objs)
 	Growl:SetScript("OnEvent", function(self, event, ...)
 		for k,v in pairs(DATA) do
 			if event == v.EVENT and CFG[k] then
-				for c = 1, #objs do
-					local obj = objs[c]
-					if not obj:IsShown() then
-						Growl.Animation(objs, c ,v,...)
-						break
+				if v.content(...) then 
+					for c = 1, #objs do
+						local obj = objs[c]
+						if not obj:IsShown() then
+							Growl.Animation(objs, c ,v,...)
+							break
+						end
 					end
 				end
 			end
