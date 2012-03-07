@@ -34,16 +34,20 @@ DATA.STATUS_CHANGE = {
 		local isDnd = UnitIsDND("player")
 		local isResting = IsResting()
 		local content = ""
-		if isAfk then
-			content = "You're AFK now" 
-		elseif isDnd then
-			content = "You're DND now" 
-		elseif isResting then
-			content = "You're Resting now"
-		else 
-			content = "Leave from AFK,DND or resting"
+		if UnitInBattleground("player") then 
+			return false
+		else
+			if isAfk then
+				content = "You're AFK now" 
+			elseif isDnd then
+				content = "You're DND now" 
+			elseif isResting then
+				content = "You're Resting now"
+			else 
+				content = "Leave from AFK,DND or resting"
+			end
+			return content 
 		end
-		return content 
 	end,
 	delay = 2,
 }
@@ -113,13 +117,13 @@ DATA.LOOT_INFO = {
 	EVENT = "CHAT_MSG_LOOT",
 	source = "ITEM",
 	title = function(...)
-		local title = "You loot item"
+		local title = "You get an item"
 		return title
 	end,
 	content = function(...)
 		local msg = ...
 		local op1,op2 = "%[","%]"
-		local cs = "获得了物品"
+		local cs = "获得了物品" or "得到了物品"
 		if not string.find(msg,cs) then 
 			return false 
 		else
@@ -136,6 +140,42 @@ DATA.LOOT_INFO = {
 				return false
 			end
 		end
+	end,
+	delay = 3.5,
+}
+
+DATA.CURRENCY_INFO = {
+	EVENT = "CHAT_MSG_CURRENCY",
+	source = "SYSTEM",
+	title = function(...)
+		local title = "You recieve currency"
+		return title
+	end,
+	content = function(...)
+		local msg = ... 
+		local content = ""
+		local op = {"%[","%]","x","%。"}
+		local ops = {}
+		for i =1, 4 do
+			ops[i] = {string.find(msg,op[i])}
+		end
+		local currencyIDbyType = {
+			["正义点数"] = 395,
+			["勇气点数"] = 396,
+		}
+		local currencyType = string.sub(msg,ops[1][2]+1,ops[2][1]-1) -- cut the string between "[" and "]"            "[justice points]" will return "justice points"
+		local currencyPoints = string.sub(msg,ops[3][2],ops[4][1]-1) -- cut the number between "x" and "."          "x77." will return "77"
+		if currencyType == "勇气点数" then 
+			local _,allCP,_,curCP = GetCurrencyInfo(currencyIDbyType[currencyType])	
+			content = string.format("%s:%s,%s:%s,%s:%s","获取"..currencyType,currencyPoints,"本周上限",curCP.."/1000","总计",allCP)
+		elseif currencyType == "正义点数" then
+			local allCP = select(2,GetCurrencyInfo(currencyIDbyType[currencyType]))
+			content = string.format("%s:%s,%s:%s","获取"..currencyType,currencyPoints,"总计",allCP)
+		else 
+			content = ""	
+		end
+		if content == "" then return false end
+		return content
 	end,
 	delay = 3.5,
 }

@@ -198,6 +198,8 @@ function Growl:SetAttributes(obj,flag)
 						BagItemSearchBox:SetFocus()
 						BagItemSearchBox:SetText(obj.content.text:GetText())
 					end
+				--elseif then   
+				--TODO
 				end
 			end)
 		end,
