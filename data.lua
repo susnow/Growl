@@ -25,7 +25,7 @@ local addon,ns = ...
 local DATA = {}
 
 DATA.WELCOME = {
-	EVENT = "PLAYER_ENTERING_WORLD",
+	EVENT = "PLAYER_LOGIN",
 	source = "SYSTEM",
 	icon = "QB",
 	title = function(...)
