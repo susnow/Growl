@@ -9,5 +9,6 @@ CFG.BN_WHISPER = true
 CFG.NEW_MAIL = false -- this key maybe has bug 
 CFG.LOOT_INFO = true 
 CFG.CURRENCY_INFO = true
+CFG.WELCOME = true
 
 ns.CFG = CFG 

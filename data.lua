@@ -24,6 +24,19 @@ GG HF
 local addon,ns = ...
 local DATA = {}
 
+DATA.WELCOME = {
+	EVENT = "PLAYER_ENTERING_WORLD",
+	source = "SYSTEM",
+	icon = "QB",
+	title = function(...)
+		return "Welcome use Growl for WoW"
+	end,
+	content = function(...)
+		return "僕と契約して、魔法少女になってよ"
+	end,
+	delay = 3.5,
+}
+
 DATA.STATUS_CHANGE = {
 	EVENT = "PLAYER_FLAGS_CHANGED",
 	source = "SYSTEM",
