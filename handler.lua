@@ -3,9 +3,11 @@ local Growl = CreateFrame("Frame")
 local Growls = {}
 local CFG = ns.CFG
 local DATA = ns.DATA
+local media = "Interface\\AddOns\\Growl\\media\\"
 local tex = "Interface\\Buttons\\WHITE8X8"
-local bg = "Interface\\AddOns\\Growl\\media\\smoke.tga"
-local font =  "Interface\\AddOns\\Growl\\media\\string.ttf"
+local bg = media.."smoke.tga"
+local font =  media.."string.ttf"
+local defaultIcon = media.."help.tga"
 
 
 function Growl:New(obj,index)
@@ -74,9 +76,9 @@ function Growl:New(obj,index)
 	obj.icon:SetSize(obj:GetHeight()-20, obj:GetHeight()-20)
 	obj.icon:SetPoint("TOPLEFT", obj, 10, -10)
 	obj.icon.tex = obj.icon:CreateTexture(nil, "OVERLAY")
-	obj.icon.tex:SetTexture(tex)
+	obj.icon.tex:SetTexture(defaultIcon)
 	obj.icon.tex:SetAllPoints(obj.icon)
-	obj.icon.tex:SetVertexColor(1, 1, 1, .2)
+	obj.icon.tex:SetVertexColor(1, 1, 1, .5)
 
 	--title
 	obj.title = CreateFrame("Frame", "Growl"..index.."Title", obj)
@@ -214,6 +216,8 @@ function Growl.Animation(objects,index,value,...)
 	objects[index].title.text:SetText(value.title(...) or "")
 	objects[index].content.text:SetText(value.content(...) or "")
 	objects[index].source = value.source
+	objects[index].icon.tex:SetTexture(media..value.icon or defaultIcon)
+
 	Growl:StartHide(objects[index],GetTime() + value.delay)
 end
 

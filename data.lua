@@ -3,6 +3,7 @@ USEAGE:
 you can create DATA object as a table like the sample:
 DATA.xxx = {
 	EVENT = "XXXXXXXX", --Growl object will register this event 
+	icon = "xxxxx", --the icon's textrues, this value must be same named with media textrue's name 
 	source = "XXXXXXX", --the source will effect the object's click function, "PLAYER" will send whisper message to the whisper  , "ITEM" will open the Gametooltip of the item ,and others won't do anything   
 	title = function(...)  	
 		return title_text  --in the function you should set your title_text as a string object 
@@ -29,6 +30,7 @@ DATA.STATUS_CHANGE = {
 	title = function(...) 
 		return "Status changed" 
 	end,
+	icon = "eye",
 	content = function(...) 
 		local isAfk = UnitIsAFK("player")
 		local isDnd = UnitIsDND("player")
@@ -55,6 +57,7 @@ DATA.STATUS_CHANGE = {
 DATA.WHISPER = {
 	EVENT = "CHAT_MSG_WHISPER",
 	source = "PLAYER",
+	icon = "msg",
 	title = function(...)  
 		local sender = select(2,...)
 		local isMyFriend = false
@@ -86,6 +89,7 @@ DATA.WHISPER = {
 DATA.BN_WHISPER = {
 	EVENT = "CHAT_MSG_BN_WHISPER",
 	source = "PLAYER",
+	icon = "phone",
 	title = function(...)  
 		local sender = select(2,...)
 		local title = "Whisper from BN RealID" 
@@ -102,6 +106,7 @@ DATA.BN_WHISPER = {
 DATA.NEW_MAIL = {
 	EVENT = "UPDATE_PENDING_MAIL",
 	source = "SYSTEM",
+	icon = "mail",
 	title = function(...)
 		local title = "You get a new mail"
 		return title
@@ -115,6 +120,7 @@ DATA.NEW_MAIL = {
 
 DATA.LOOT_INFO = {
 	EVENT = "CHAT_MSG_LOOT",
+	icon = "loot",
 	source = "ITEM",
 	title = function(...)
 		local title = "You get an item"
@@ -146,6 +152,7 @@ DATA.LOOT_INFO = {
 
 DATA.CURRENCY_INFO = {
 	EVENT = "CHAT_MSG_CURRENCY",
+	icon = "heart",
 	source = "SYSTEM",
 	title = function(...)
 		local title = "You recieve currency"
