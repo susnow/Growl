@@ -49,7 +49,7 @@ DATA.STATUS_CHANGE = {
 		local isDnd = UnitIsDND("player")
 		local isResting = IsResting()
 		local content = ""
-		if UnitInBattleground("player") then 
+		if UnitAffectingCombat("player") then 
 			return false
 		else
 			if isAfk then
