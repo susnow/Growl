@@ -142,10 +142,19 @@ DATA.LOOT_INFO = {
 	content = function(...)
 		local msg = ...
 		local op1,op2 = "%[","%]"
-		local cs = "获得了物品" or "得到了物品" or "获得了" 
-		if not string.find(msg,cs) then 
-				return false 
+		local cs = ""  
+		if string.find(msg,"获得了物品") then
+			cs = "获得了物品"
+		elseif string.find(msg,"得到了物品") then
+			cs = "得到了物品"
+		elseif string.find(msg,"获得了") then
+			cs = "获得了"
 		else
+			return false
+		end
+	--	if not string.find(msg,cs) then 
+	--			return false 
+	--	else
 			local index1,index2 = string.find(msg,cs)
 			local looter = string.sub(msg,1,index1-1)
 			local op1s,op1e = string.find(msg,op1)
@@ -158,7 +167,7 @@ DATA.LOOT_INFO = {
 			else 
 				return false
 			end
-		end
+	--	end
 	end,
 	delay = 3.5,
 }
