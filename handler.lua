@@ -222,7 +222,8 @@ end
 
 
 function Growl:Sleep(obj,time,...)
-	local handler = obj:GetScript("OnEvent")
+	local handler = obj:GetScript("OnEvent") 
+	--print(handler)
 	if time then
 		local oldTime = GetTime()
 		obj:SetScript("OnUpdate",function(self,elapsed,...)
@@ -253,9 +254,9 @@ function Growl:Load(objs)
 						local obj = objs[i]
 						if not obj:IsShown() then
 							Growl.Animation(objs, i ,v,...)
-							if v.filter then
-								Growl:Sleep(objs[i],v.filter,...)
-							end
+						--	if v.filter then
+						--		Growl:Sleep(objs[i],v.filter,...)
+						--	end
 							break
 						end
 					end
