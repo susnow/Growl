@@ -15,6 +15,7 @@ DATA.xxx = {
 		-- elseif you needn't control animation,let it show when the event is firing, you just need return the string object in your function and it equivalent to return true 
 	end,
 	delay = 1, -- how long does the Growl object display , it must be a int object or float object
+	filter = 3, -- this key will set keep firing event just show once Growl object in times , it must be a int object or float object
 }
 
 when you create the DATA object , create the same name data object in config.lua and set it true or false if you wanna enable it or not 
@@ -29,7 +30,7 @@ DATA.WELCOME = {
 	source = "SYSTEM",
 	icon = "QB",
 	title = function(...)
-		return "Welcome use Growl for WoW"
+		return "Welcome to use Growl for WoW"
 	end,
 	content = function(...)
 		return "僕と契約して、魔法少女になってよ"
@@ -97,6 +98,7 @@ DATA.WHISPER = {
 		return content
 	end,
 	delay = 3.5,
+	filter = 5,
 }
 
 DATA.BN_WHISPER = {
