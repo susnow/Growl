@@ -221,6 +221,31 @@ function Growl.Animation(objects,index,value,...)
 	Growl:StartHide(objects[index],GetTime() + value.delay)
 end
 
+function Growl.Filter(objects,index,value,...)
+	if value.filter then
+		Growl.Animation(objects,index,value,...)
+		objects[index]:UnregisterEvent(value.EVENT)
+		local oldTime = GetTime()
+		objects[index]:SetScript("OnUpdate",function(self,elapsed)
+			self.nextUpdate = self.nextUpdate + elapsed
+			if self.nextUpdate > 0.1 then
+				local newTime = GetTime()
+				if (newTime - oldTime) < value.filter then
+					return
+				else
+					self:RegisterEvent(value.EVENT)
+					self:SetScript("OnEvent",function(self,event,...)
+						Growl.Animation(objects,index,value,...)
+					end)
+					self:SetScript("OnUpdate",nil)
+				end
+				self.nextUpdate = 0
+			end
+		end)
+	end
+end
+
+
 function Growl:Load(objs)
 	for k, v in pairs(DATA) do
 		if v and v.EVENT then
@@ -234,8 +259,12 @@ function Growl:Load(objs)
 					for c = 1, #objs do
 						local obj = objs[c]
 						if not obj:IsShown() then
-							Growl.Animation(objs, c ,v,...)
-							break
+							if v.filter then
+								Growl.Filter(objs,c,v,....)
+							else
+								Growl.Animation(objs, c ,v,...)
+								break
+							end
 						end
 					end
 				end
