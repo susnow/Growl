@@ -154,9 +154,6 @@ DATA.LOOT_INFO = {
 		else
 			return false
 		end
-	--	if not string.find(msg,cs) then 
-	--			return false 
-	--	else
 			local index1,index2 = string.find(msg,cs)
 			local looter = string.sub(msg,1,index1-1)
 			local op1s,op1e = string.find(msg,op1)
@@ -169,7 +166,6 @@ DATA.LOOT_INFO = {
 			else 
 				return false
 			end
-	--	end
 	end,
 	delay = 3.5,
 }

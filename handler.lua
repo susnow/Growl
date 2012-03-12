@@ -222,27 +222,26 @@ function Growl.Animation(objects,index,value,...)
 end
 
 function Growl.Filter(objects,index,value,...)
-	if value.filter then
-		Growl.Animation(objects,index,value,...)
-		objects[index]:UnregisterEvent(value.EVENT)
-		local oldTime = GetTime()
-		objects[index]:SetScript("OnUpdate",function(self,elapsed)
-			self.nextUpdate = self.nextUpdate + elapsed
-			if self.nextUpdate > 0.1 then
-				local newTime = GetTime()
-				if (newTime - oldTime) < value.filter then
-					return
-				else
-					self:RegisterEvent(value.EVENT)
-					self:SetScript("OnEvent",function(self,event,...)
-						Growl.Animation(objects,index,value,...)
-					end)
-					self:SetScript("OnUpdate",nil)
-				end
-				self.nextUpdate = 0
+	Growl.Animation(objects,index,value,...)
+	--objects[index]:UnregisterEvent(value.EVENT)
+	local oldTime = GetTime()
+	objects[index]:SetScript("OnUpdate",function(self,elapsed)
+		self.nextUpdate = self.nextUpdate + elapsed
+		if self.nextUpdate > 0.1 then
+			local newTime = GetTime()
+			if (newTime - oldTime) < value.filter then
+			--return
+				break
+			else
+				--	self:RegisterEvent(value.EVENT)
+				--	self:SetScript("OnEvent",function(self,event,...)
+				Growl.Animation(objects,index,value,...)
+				--	end)
+				self:SetScript("OnUpdate",nil)
 			end
-		end)
-	end
+			self.nextUpdate = 0
+		end
+	end)
 end
 
 
