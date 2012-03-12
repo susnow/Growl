@@ -217,59 +217,52 @@ function Growl.Animation(objects,index,value,...)
 	objects[index].content.text:SetText(value.content(...) or "")
 	objects[index].source = value.source
 	objects[index].icon.tex:SetTexture(media..value.icon or defaultIcon)
-
 	Growl:StartHide(objects[index],GetTime() + value.delay)
 end
 
-function Growl.Filter(objects,index,value,...)
-	Growl.Animation(objects,index,value,...)
-	--objects[index]:UnregisterEvent(value.EVENT)
-	local oldTime = GetTime()
-	objects[index]:SetScript("OnUpdate",function(self,elapsed)
-		self.nextUpdate = self.nextUpdate + elapsed
-		if self.nextUpdate > 0.1 then
-			local newTime = GetTime()
-			if (newTime - oldTime) < value.filter then
-			--return
-				break
-			else
-				--	self:RegisterEvent(value.EVENT)
-				--	self:SetScript("OnEvent",function(self,event,...)
-				Growl.Animation(objects,index,value,...)
-				--	end)
-				self:SetScript("OnUpdate",nil)
+
+function Growl:Sleep(obj,time,...)
+	local handler = obj:GetScript("OnEvent")
+	if time then
+		local oldTime = GetTime()
+		obj:SetScript("OnUpdate",function(self,elapsed,...)
+			self.nextUpdate = self.nextUpdate + elapsed
+			if self.nextUpdate > 0.1 then
+				local newTime = GetTime()
+				if (newTime - oldTime) < time then
+					self:SetScript("OnEvent",nil)	
+				else
+					self:SetScript("OnEvent",handler())
+					self:SetScript("OnUpdate",nil)
+				end
 			end
 			self.nextUpdate = 0
-		end
-	end)
+		end)
+	end
 end
-
 
 function Growl:Load(objs)
 	for k, v in pairs(DATA) do
 		if v and v.EVENT then
 			Growl:RegisterEvent(v.EVENT)
 		end
-	end
-	Growl:SetScript("OnEvent", function(self, event, ...)
-		for k,v in pairs(DATA) do
+		Growl:SetScript("OnEvent", function(self, event, ...)
 			if event == v.EVENT and CFG[k] then
 				if v.content(...) then 
-					for c = 1, #objs do
-						local obj = objs[c]
+					for i = 1, #objs do
+						local obj = objs[i]
 						if not obj:IsShown() then
+							Growl.Animation(objs, i ,v,...)
 							if v.filter then
-								Growl.Filter(objs,c,v,....)
-							else
-								Growl.Animation(objs, c ,v,...)
-								break
+								Growl:Sleep(objs[i],v.filter,...)
 							end
+							break
 						end
 					end
 				end
 			end
-		end
-	end)
+		end)
+	end
 end
 
 ns.Growl = Growl
