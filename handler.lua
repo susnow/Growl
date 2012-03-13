@@ -221,49 +221,51 @@ function Growl.Animation(objects,index,value,...)
 end
 
 
-function Growl:Sleep(obj,time,...)
-	local handler = obj:GetScript("OnEvent") 
-	--print(handler)
-	if time then
-		local oldTime = GetTime()
-		obj:SetScript("OnUpdate",function(self,elapsed,...)
-			self.nextUpdate = self.nextUpdate + elapsed
-			if self.nextUpdate > 0.1 then
-				local newTime = GetTime()
-				if (newTime - oldTime) < time then
-					self:SetScript("OnEvent",nil)	
-				else
-					self:SetScript("OnEvent",handler())
-					self:SetScript("OnUpdate",nil)
-				end
-			end
-			self.nextUpdate = 0
-		end)
-	end
-end
+--function Growl:Sleep(obj,time,...)
+--	local handler = obj:GetScript("OnEvent") 
+--	--print(handler)
+--	if time then
+--		local oldTime = GetTime()
+--		obj:SetScript("OnUpdate",function(self,elapsed,...)
+--			self.nextUpdate = self.nextUpdate + elapsed
+--			if self.nextUpdate > 0.1 then
+--				local newTime = GetTime()
+--				if (newTime - oldTime) < time then
+--					self:SetScript("OnEvent",nil)	
+--				else
+--					self:SetScript("OnEvent",handler())
+--					self:SetScript("OnUpdate",nil)
+--				end
+--			end
+--			self.nextUpdate = 0
+--		end)
+--	end
+--end
 
 function Growl:Load(objs)
 	for k, v in pairs(DATA) do
 		if v and v.EVENT then
 			Growl:RegisterEvent(v.EVENT)
 		end
+	end
 		Growl:SetScript("OnEvent", function(self, event, ...)
-			if event == v.EVENT and CFG[k] then
-				if v.content(...) then 
-					for i = 1, #objs do
-						local obj = objs[i]
-						if not obj:IsShown() then
-							Growl.Animation(objs, i ,v,...)
-						--	if v.filter then
-						--		Growl:Sleep(objs[i],v.filter,...)
-						--	end
-							break
+			for k, v in pairs(DATA) do
+				if event == v.EVENT and CFG[k] then
+					if v.content(...) then 
+						for i = 1, #objs do
+							local obj = objs[i]
+							if not obj:IsShown() then
+								Growl.Animation(objs, i ,v,...)
+								--	if v.filter then
+								--		Growl:Sleep(objs[i],v.filter,...)
+								--	end
+								break
+							end
 						end
 					end
 				end
 			end
 		end)
 	end
-end
 
 ns.Growl = Growl

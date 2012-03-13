@@ -98,7 +98,7 @@ DATA.WHISPER = {
 		return content
 	end,
 	delay = 3.5,
-	filter = 5,
+	--filter = 5,
 }
 
 DATA.BN_WHISPER = {
